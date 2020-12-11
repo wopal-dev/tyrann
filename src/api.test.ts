@@ -27,7 +27,34 @@ const api = {
                     })
                 }
             }
-        }
+        },
+        "/query": {
+            get: {
+                query: yup.object({
+                    a: yup.string().required(),
+                    b: yup.string().required(),
+                }),
+                responses: {
+                    '200': yup.object({
+                        brotli: yup.string().required(),
+                        method: yup.string().required(),
+                    })
+                }
+            }
+        },
+        "/path/{id}": {
+            get: {
+                path: yup.object({
+                    id: yup.number().required(),
+                }),
+                responses: {
+                    '200': yup.object({
+                        brotli: yup.string().required(),
+                        method: yup.string().required(),
+                    })
+                }
+            }
+        },
     }
 };
 
@@ -58,12 +85,29 @@ async () => {
         x[200]?.brotli;
     });
 
-    await client.post("/post", {x: 1, y: 1}).then(x => {
+    await client.post("/post", { x: 1, y: 1 }).then(x => {
         x[200]?.brotli;
     });
 
     // @ts-expect-error
     await client.post("/post").then(x => {
+        x[200]?.brotli;
+    });
+
+    await client.get("/query", {
+        query: {
+            a: "a",
+            b: "b"
+        }
+    }).then(x => {
+        x[200]?.brotli;
+    });
+
+    await client.get("/path/{id}", {
+        params: {
+            id: 114514
+        }
+    }).then(x => {
         x[200]?.brotli;
     });
 }
