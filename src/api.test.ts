@@ -44,7 +44,7 @@ const api = {
         },
         "/path/{id}": {
             get: {
-                path: yup.object({
+                pathParams: yup.object({
                     id: yup.number().required(),
                 }),
                 responses: {
@@ -104,8 +104,8 @@ async () => {
     });
 
     await client.get("/path/{id}", {
-        params: {
-            id: 114514
+        pathParams: {
+            id: 1
         }
     }).then(x => {
         x[200]?.brotli;

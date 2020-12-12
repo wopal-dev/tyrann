@@ -73,16 +73,16 @@ export const tyrann = <Paths extends BasePaths, ApiType extends Api<Paths>>(
             method: method as AxiosRequestConfig['method'],
             ...config,
         });
-
+        const fullPath = response.request.responseURL || finalUrl;
         const schema = (operation as any)?.responses?.[`${response.status}`] as yup.BaseSchema;
 
         const warnError = () => {
-            console.warn(`${method} ${path} received unexpected data with code ${response.status}: \n${finalUrl}\n${JSON.stringify(response.data, undefined, 2)}`)
+            console.warn(`${method} ${fullPath} received unexpected data with code ${response.status}: \n${fullPath}\n${JSON.stringify(response.data, undefined, 2)}`)
         }
 
         if (schema === undefined) {
             warnError();
-            throw new Error(`${method} ${path} response of status ${response.status} is not handled`);
+            throw new Error(`${method} ${fullPath} response of status ${response.status} is not handled`);
         }
 
         try {
@@ -97,7 +97,7 @@ export const tyrann = <Paths extends BasePaths, ApiType extends Api<Paths>>(
             } as any
         } catch (e) {
             warnError();
-            throw new Error(`${method} ${path} got invalid data: ${JSON.stringify(e.errors, undefined, 2)}`);
+            throw new Error(`${method} ${fullPath} got invalid data: ${JSON.stringify(e.errors, undefined, 2)}`);
         }
     }
 
