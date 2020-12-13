@@ -62,7 +62,7 @@ export const tyrann = <Paths extends BasePaths, ApiType extends Api<Paths>>(
             if (config?.query === undefined) {
                 throw new Error(`Query params are not supplied to ${method} ${path}`);
             }
-            const sanitizedParams = await operation.query.validate(config?.pathParams!);
+            const sanitizedParams = await operation.query.validate(config?.query!);
             if (Object.keys(sanitizedParams).length > 0) {
                 finalUrl += '?' + new URLSearchParams(sanitizedParams).toString();
             }
