@@ -73,21 +73,33 @@ export const tyrann = <Paths extends BasePaths, ApiType extends Api<Paths>>(
             method: method as AxiosRequestConfig['method'],
             ...config,
         });
+
         const fullPath = response.request.responseURL || finalUrl;
-        const schema = (operation as any)?.responses?.[`${response.status}`] as yup.BaseSchema;
 
         const warnError = () => {
             console.warn(`${method} ${fullPath} received unexpected data with code ${response.status}: \n${fullPath}\n${JSON.stringify(response.data, undefined, 2)}`)
         }
+
+        const responseDef = (operation as any)?.responses?.[`${response.status}`];
+        let schema: yup.BaseSchema | undefined = responseDef;
 
         if (schema === undefined) {
             warnError();
             throw new Error(`${method} ${fullPath} response of status ${response.status} is not handled`);
         }
 
+        let transform: any;
+
+        if (responseDef.schema !== undefined) {
+            schema = responseDef.schema;
+            transform = responseDef.transform;
+        }
+
         try {
-            const result = await schema.validate(response.data);
+            let result = await schema!.validate(response.data);
+            result = transform ? transform(result) : result;
             const ok = response.status >= 200 && response.status < 400;
+
             return {
                 ok,
                 path,

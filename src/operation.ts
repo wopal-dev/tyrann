@@ -6,7 +6,16 @@ export type Equals<X, Y> =
     (<T>() => T extends Y ? 1 : 2) ? true : false;
 
 export type BaseResponses = {
-    [x in HttpStatus]?: yup.AnySchema
+    [x in HttpStatus]?: AllResponses
+}
+
+export type AllResponses = BasicResponse | TransformedResponse;
+
+export type BasicResponse = yup.AnySchema;
+
+export type TransformedResponse<Schema extends yup.AnySchema = yup.AnySchema, OutType = any> = {
+    schema: Schema,
+    transform: (sanitizedData: yup.InferType<Schema>) => OutType
 }
 
 export type ResponseExtraField = {
@@ -21,7 +30,7 @@ export type BaseResponseType = ResponseExtraField & {
 }
 
 export type Operation<
-    Responses extends BaseResponses = any,
+    Responses extends BaseResponses = BaseResponses,
     QuerySchema extends yup.AnySchema = any,
     PathParamsSchema extends yup.AnySchema = any,
     BodySchema extends yup.AnySchema = any,
@@ -33,10 +42,15 @@ export type Operation<
         responses: Responses;
     };
 
+export type InferResponseType<Response> =
+    Response extends TransformedResponse<any, infer OutType> ? OutType :
+    Response extends BasicResponse ? yup.InferType<Response> : never;
+
+
 export type MapOperationToResponse<OperationType extends Operation> =
     OperationType['responses'] extends BaseResponses ?
     ResponseExtraField & {
-        [x in HttpStatus]?: yup.InferType<OperationType['responses'][x]>
+        [x in HttpStatus]?: InferResponseType<OperationType['responses'][x]>
     } : never;
 
 export type MapOperationToBodyType<OperationType extends Operation> =

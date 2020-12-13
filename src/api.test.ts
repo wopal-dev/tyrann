@@ -55,6 +55,22 @@ const api = {
                 }
             }
         },
+        "/transform/{id}": {
+            get: {
+                pathParams: yup.object({
+                    id: yup.number().required(),
+                }),
+                responses: {
+                    '200': {
+                        schema: yup.object({
+                            brotli: yup.string().required(),
+                            method: yup.string().required(),
+                        }),
+                        transform: (i: {brotli: string, method: string}) => i.brotli + i.method,
+                    }
+                }
+            }
+        },
     }
 };
 
@@ -103,11 +119,11 @@ async () => {
         x[200]?.brotli;
     });
 
-    await client.get("/path/{id}", {
+    await client.get("/transform/{id}", {
         pathParams: {
             id: 1
         }
     }).then(x => {
-        x[200]?.brotli;
+        const s: string | undefined = x[200];
     });
 }
