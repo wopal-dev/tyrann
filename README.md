@@ -1,6 +1,12 @@
 # tyrann
 An easy solution to keep your REST calls and data types in the same place
 
+## Author
+* __[Chenyu Wang](https://github.com/hanayashiki)__
+
+    @hanayashiki is the current maintainer of the code and has written much of the
+    current code base.
+
 ## Overview
 
 + Describe your data
