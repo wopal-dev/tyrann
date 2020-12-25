@@ -1,5 +1,5 @@
 import { Api, BasePaths, InferPaths } from "./api";
-import Axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import Axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { Methods, Path } from "./path";
 import { MapOperationToBodyType, MapOperationToPathParamsType, MapOperationToQueryType, MapOperationToResponse, Operation } from "./operation";
 import * as yup from 'yup';
@@ -14,8 +14,13 @@ export type TyrannConfig<OperationType extends Operation> = AxiosRequestConfig &
     pathParams?: MapOperationToPathParamsType<OperationType>,
 };
 
+export interface TyrannOptions {
+    onRequest?: (axiosOptions: AxiosRequestConfig) => void | Promise<void>;
+    onResponse?: (latency: number, response: AxiosResponse<any>, axiosOptions: AxiosRequestConfig) => void | Promise<void>;
+}
+
 export const tyrann = <Paths extends BasePaths, ApiType extends Api<Paths>>(
-    api: ApiType, axiosInstance?: AxiosInstance
+    api: ApiType, axiosInstance?: AxiosInstance, options?: TyrannOptions
 ) => {
     const axios = axiosInstance || Axios.create();
 
@@ -68,11 +73,18 @@ export const tyrann = <Paths extends BasePaths, ApiType extends Api<Paths>>(
             }
         }
 
-        const response = await axios.request({
+        let startTime = Date.now();
+        const axiosOptions = {
             url: finalUrl,
             method: method as AxiosRequestConfig['method'],
             ...config,
-        });
+        };
+
+        options?.onRequest?.(axiosOptions);
+
+        const response = await axios.request(axiosOptions);
+
+        options?.onResponse?.(Date.now() - startTime, response, axiosOptions);
 
         const fullPath = response.request.responseURL || finalUrl;
 
