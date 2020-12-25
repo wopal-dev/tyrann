@@ -7,6 +7,8 @@ An easy solution to keep your REST calls and data types in the same place
     @hanayashiki is the current maintainer of the code and has written much of the
     current code base.
 
+    Welcome to my technical blog (mostly in Simplified Chinese): https://blog.chenyu.pw  
+
 ## Overview
 
 + Describe your data
