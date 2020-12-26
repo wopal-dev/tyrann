@@ -1,8 +1,12 @@
 {
   "name": "tyrann",
-  "version": "0.0.2",
-  "main": "src/index.ts",
+  "version": "0.0.4",
+  "main": "dist/index.js",
+  "types": "src/index.ts",
   "license": "MIT",
+  "scripts": {
+    "prepublish": "tsc"
+  },
   "dependencies": {
     "yup": "^0.32.8"
   }
