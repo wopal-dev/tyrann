@@ -147,7 +147,7 @@ buck-out/
 .expo/*
 web-build/
 
-dist/
+#dist/
 
 *.p8
 # Elastic Beanstalk Files
