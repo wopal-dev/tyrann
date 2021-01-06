@@ -1,0 +1,10 @@
+{
+  "name": "tyrann",
+  "version": "0.0.2",
+  "main": "src/index.ts",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.0",
+    "yup": "^0.32.8"
+  }
+}
