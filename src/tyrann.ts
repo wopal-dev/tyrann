@@ -127,14 +127,14 @@ export const tyrann = <Paths extends BasePaths, ApiType extends Api<Paths>>(
 
     const get: MethodType<"get"> = (path, config) => fetch("get", path, config);
     const post: PostType = (path, body, config) => fetch("post", path, { data: body, ...config });
-    const put: PostType = (path, body, config) => fetch("put", path, { data: body, ...config });
+    // const put: PostType = (path, body, config) => fetch("put", path, { data: body, ...config });
     const del: MethodType<"delete"> = (path, config) => fetch("delete", path, config);
 
     return {
         fetch,
         get,
         post,
-        put,
+        // put,
         del,
         api,
         axios,

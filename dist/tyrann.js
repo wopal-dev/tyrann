@@ -135,13 +135,13 @@ exports.tyrann = function (api, axiosInstance, options) {
     }); };
     var get = function (path, config) { return fetch("get", path, config); };
     var post = function (path, body, config) { return fetch("post", path, __assign({ data: body }, config)); };
-    var put = function (path, body, config) { return fetch("put", path, __assign({ data: body }, config)); };
+    // const put: PostType = (path, body, config) => fetch("put", path, { data: body, ...config });
     var del = function (path, config) { return fetch("delete", path, config); };
     return {
         fetch: fetch,
         get: get,
         post: post,
-        put: put,
+        // put,
         del: del,
         api: api,
         axios: axios,

@@ -61,6 +61,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var tyrann_1 = require("./tyrann");
 var yup = __importStar(require("yup"));
 var axios_1 = __importDefault(require("axios"));
+var idSchema = yup.object({
+    id: yup.string(),
+});
+// @ts-expect-error
+var id1 = {};
+var id2 = {};
+var id3 = { id: undefined };
+var id4 = {};
 var api = {
     paths: {
         "/brotli": {
@@ -105,6 +113,19 @@ var api = {
             get: {
                 pathParams: yup.object({
                     id: yup.number().required(),
+                }),
+                responses: {
+                    '200': yup.object({
+                        brotli: yup.string().required(),
+                        method: yup.string().required(),
+                    })
+                }
+            }
+        },
+        "/not-required/{id}": {
+            get: {
+                pathParams: yup.object({
+                    id: yup.number(),
                 }),
                 responses: {
                     '200': yup.object({
@@ -205,7 +226,27 @@ var client = tyrann_1.tyrann(api, instance);
                     })];
             case 9:
                 _a.sent();
+                return [4 /*yield*/, client.get("/transform/{id}", {
+                        // @ts-expect-error
+                        pathParams: {}
+                    }).then(function (x) {
+                        var s = x[200];
+                    })];
+            case 10:
+                _a.sent();
+                return [4 /*yield*/, client.get("/not-required/{id}", {
+                        pathParams: {}
+                    })];
+            case 11:
+                _a.sent();
                 return [2 /*return*/];
         }
     });
 }); });
+var idSchema2 = yup.object({
+    id: yup.string(),
+    id2: yup.string().defined(),
+});
+var t = {
+    id2: "11",
+};
