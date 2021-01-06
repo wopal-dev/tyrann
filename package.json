@@ -8,6 +8,7 @@
     "prepublish": "tsc"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "yup": "^0.32.8"
   }
 }
