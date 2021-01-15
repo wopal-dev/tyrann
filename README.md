@@ -14,7 +14,7 @@ An easy solution to keep your REST calls and data types in the same place
 + Describe your data
 
 ```typescript
-import { tyrann } from "./tyrann";
+import { tyrann } from "tyrann";
 const api = {
     paths: {
         "/coordinate": {
