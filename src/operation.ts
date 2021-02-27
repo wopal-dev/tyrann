@@ -1,22 +1,17 @@
 import { HttpStatus } from "./http-status";
 import * as yup from 'yup';
-import { ObjectSchema } from "yup";
-import { ObjectShape } from "yup/lib/object";
-import { TypedSchema } from "yup/lib/util/types";
+import { InferInterface } from "./schemaUtils";
 
-export type Equals<X, Y> =
-    (<T>() => T extends X ? 1 : 2) extends
-    (<T>() => T extends Y ? 1 : 2) ? true : false;
 
 export type BaseResponses = {
-    [x in HttpStatus]?: AllResponses
+    [x in HttpStatus]?: GenericSchema
 }
 
-export type AllResponses = BasicResponse | TransformedResponse;
+export type GenericSchema = BasicSchema | TransformedSchema;
 
-export type BasicResponse = yup.AnySchema;
+export type BasicSchema = yup.AnySchema;
 
-export type TransformedResponse<Schema extends yup.AnySchema = yup.AnySchema, OutType = any> = {
+export type TransformedSchema<Schema extends yup.AnySchema = yup.AnySchema, OutType = any> = {
     schema: Schema,
     transform: (sanitizedData: yup.InferType<Schema>) => OutType
 }
@@ -25,36 +20,17 @@ export type ResponseExtraField = {
     ok: boolean,
     path: string,
     url: string,
-    status: number,
+    status: number, 
 }
 
 export type BaseResponseType = ResponseExtraField & {
     [x in HttpStatus]?: any;
 }
 
-export type InferShape<TSchema> =
-    TSchema extends ObjectSchema<infer Shape> ? Shape : never;
-
-export type UndefinableKeys<Shape extends ObjectShape> = string & {
-    [K in keyof Shape]?:
-    Shape[K] extends TypedSchema ?
-    undefined extends yup.InferType<Shape[K]> ?
-    K : never
-    : never;
-}[keyof Shape];
-
-export type InferInterfaceFromShape<Shape extends ObjectShape> = {
-    [K in UndefinableKeys<Shape>]?: Shape[K] extends TypedSchema ? yup.InferType<Shape[K]> : any;
-} & {
-        [K in Exclude<keyof Shape, UndefinableKeys<Shape>>]: Shape[K] extends TypedSchema ? yup.InferType<Shape[K]> : any;
-    }
-
-export type InferInterface<TSchema> =
-    InferInterfaceFromShape<InferShape<TSchema>>;
 
 export type Operation<
     Responses extends BaseResponses = BaseResponses,
-    QuerySchema extends yup.AnySchema = any,
+    QuerySchema extends GenericSchema = GenericSchema,
     PathParamsSchema extends yup.AnySchema = any,
     BodySchema extends yup.AnySchema = any,
     > = {
@@ -66,8 +42,8 @@ export type Operation<
     };
 
 export type InferResponseType<Response> =
-    Response extends TransformedResponse<any, infer OutType> ? OutType :
-    Response extends BasicResponse ? yup.InferType<Response> : never;
+    Response extends TransformedSchema<any, infer OutType> ? OutType :
+    Response extends BasicSchema ? yup.InferType<Response> : never;
 
 
 export type MapOperationToResponse<OperationType extends Operation> =
@@ -80,7 +56,7 @@ export type MapOperationToBodyType<OperationType extends Operation> =
     OperationType['body'] extends yup.AnySchema ? InferInterface<OperationType['body']> : undefined;
 
 export type MapOperationToQueryType<OperationType extends Operation> =
-    OperationType['query'] extends yup.AnySchema ? InferInterface<OperationType['query']> : undefined;
+    OperationType['query'] extends GenericSchema ? InferInterface<OperationType['query']> : undefined;
 
 export type MapOperationToPathParamsType<OperationType extends Operation> =
     OperationType['pathParams'] extends yup.AnySchema ? InferInterface<OperationType['pathParams']> : undefined;

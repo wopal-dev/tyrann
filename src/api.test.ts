@@ -1,7 +1,7 @@
 import { tyrann } from "./tyrann";
 import * as yup from 'yup';
 import Axios from "axios";
-import { InferInterfaceFromShape, InferShape, UndefinableKeys } from "./operation";
+import { InferInterfaceFromShape, InferShape } from "./schemaUtils";
 
 const idSchema = yup.object({
     id: yup.string(),
@@ -109,6 +109,23 @@ const api = {
                 pathParams: yup.object({
                     id: yup.number().required(),
                 }),
+                responses: {
+                    '200': {
+                        schema: yup.object({
+                            brotli: yup.string().required(),
+                            method: yup.string().required(),
+                        }),
+                        transform: (i: {brotli: string, method: string}) => i.brotli + i.method,
+                    }
+                }
+            }
+        },
+        "/transform/query/{id}": {
+            get: {
+                query: {
+                    schema: yup.object({}),
+                    transform: (x: {}) => ({...x, a: 1})
+                },
                 responses: {
                     '200': {
                         schema: yup.object({
