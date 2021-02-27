@@ -20,7 +20,7 @@ export type ResponseExtraField = {
     ok: boolean,
     path: string,
     url: string,
-    status: number, 
+    status: number,
 }
 
 export type BaseResponseType = ResponseExtraField & {
@@ -56,7 +56,8 @@ export type MapOperationToBodyType<OperationType extends Operation> =
     OperationType['body'] extends yup.AnySchema ? InferInterface<OperationType['body']> : undefined;
 
 export type MapOperationToQueryType<OperationType extends Operation> =
-    OperationType['query'] extends GenericSchema ? InferInterface<OperationType['query']> : undefined;
+    OperationType['query'] extends BasicSchema ? InferInterface<OperationType['query']> :
+    OperationType['query'] extends TransformedSchema ? InferInterface<OperationType['query']['schema']> : never;
 
 export type MapOperationToPathParamsType<OperationType extends Operation> =
     OperationType['pathParams'] extends yup.AnySchema ? InferInterface<OperationType['pathParams']> : undefined;

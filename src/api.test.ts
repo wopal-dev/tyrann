@@ -120,10 +120,12 @@ const api = {
                 }
             }
         },
-        "/transform/query/{id}": {
+        "/transform/query/": {
             get: {
                 query: {
-                    schema: yup.object({}),
+                    schema: yup.object({
+                        x: yup.number(),
+                    }),
                     transform: (x: {}) => ({...x, a: 1})
                 },
                 responses: {
@@ -196,6 +198,14 @@ async () => {
     await client.get("/transform/{id}", {
         // @ts-expect-error
         pathParams: {
+        }
+    }).then(x => {
+        const s: string | undefined = x[200];
+    });
+
+    await client.get("/transform/query/", {
+        query: {
+            x: 1,
         }
     }).then(x => {
         const s: string | undefined = x[200];
