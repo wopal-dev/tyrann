@@ -53,10 +53,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.tyrann = void 0;
 var axios_1 = __importDefault(require("axios"));
 var utils_1 = require("./utils");
-exports.tyrann = function (api, axiosInstance, options) {
+var tyrann = function (api, axiosInstance, options) {
     var axios = axiosInstance || axios_1.default.create();
     var fetch = function (method, path, config) { return __awaiter(void 0, void 0, void 0, function () {
-        var operation, finalUrl, sanitizedParams, sanitizedParams, startTime, axiosOptions, _a, _b, response, fullPath, warnError, responseDef, schema, transform, result, ok, e_1;
+        var operation, finalUrl, sanitizedParams, sanitizedParams, finalParams, startTime, axiosOptions, _a, _b, response, fullPath, warnError, responseDef, schema, transform, result, ok, e_1;
         var _c, _d;
         var _e, _f, _g, _h, _j;
         return __generator(this, function (_k) {
@@ -80,11 +80,15 @@ exports.tyrann = function (api, axiosInstance, options) {
                     if ((config === null || config === void 0 ? void 0 : config.query) === undefined) {
                         throw new Error("Query params are not supplied to " + method + " " + path);
                     }
-                    return [4 /*yield*/, operation.query.validate(config === null || config === void 0 ? void 0 : config.query)];
+                    return [4 /*yield*/, (('__isYupSchema__' in operation.query) ?
+                            operation.query.validate(config === null || config === void 0 ? void 0 : config.query) :
+                            operation.query.schema.validate(config === null || config === void 0 ? void 0 : config.query))];
                 case 4:
                     sanitizedParams = _k.sent();
-                    if (Object.keys(sanitizedParams).length > 0) {
-                        finalUrl += '?' + new URLSearchParams(sanitizedParams).toString();
+                    finalParams = '__isYupSchema__' in operation.query ?
+                        sanitizedParams : operation.query.transform(sanitizedParams);
+                    if (Object.keys(finalParams).length > 0) {
+                        finalUrl += '?' + new URLSearchParams(finalParams).toString();
                     }
                     _k.label = 5;
                 case 5:
@@ -157,3 +161,4 @@ exports.tyrann = function (api, axiosInstance, options) {
         axios: axios,
     };
 };
+exports.tyrann = tyrann;

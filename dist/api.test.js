@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
@@ -140,6 +151,23 @@ var api = {
                 pathParams: yup.object({
                     id: yup.number().required(),
                 }),
+                responses: {
+                    '200': {
+                        schema: yup.object({
+                            brotli: yup.string().required(),
+                            method: yup.string().required(),
+                        }),
+                        transform: function (i) { return i.brotli + i.method; },
+                    }
+                }
+            }
+        },
+        "/transform/query/{id}": {
+            get: {
+                query: {
+                    schema: yup.object({}),
+                    transform: function (x) { return (__assign(__assign({}, x), { a: 1 })); }
+                },
                 responses: {
                     '200': {
                         schema: yup.object({
