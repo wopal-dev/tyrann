@@ -162,10 +162,12 @@ var api = {
                 }
             }
         },
-        "/transform/query/{id}": {
+        "/transform/query/": {
             get: {
                 query: {
-                    schema: yup.object({}),
+                    schema: yup.object({
+                        x: yup.number(),
+                    }),
                     transform: function (x) { return (__assign(__assign({}, x), { a: 1 })); }
                 },
                 responses: {
@@ -262,10 +264,19 @@ var client = tyrann_1.tyrann(api, instance);
                     })];
             case 10:
                 _a.sent();
+                return [4 /*yield*/, client.get("/transform/query/", {
+                        query: {
+                            x: 1,
+                        }
+                    }).then(function (x) {
+                        var s = x[200];
+                    })];
+            case 11:
+                _a.sent();
                 return [4 /*yield*/, client.get("/not-required/{id}", {
                         pathParams: {}
                     })];
-            case 11:
+            case 12:
                 _a.sent();
                 return [2 /*return*/];
         }

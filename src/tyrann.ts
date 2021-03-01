@@ -1,9 +1,17 @@
-import { Api, BasePaths, InferPaths } from "./api";
-import Axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { Methods, Path } from "./path";
-import { MapOperationToBodyType, MapOperationToPathParamsType, MapOperationToQueryType, MapOperationToResponse, Operation } from "./operation";
-import * as yup from 'yup';
-import { formatString } from "./utils";
+import * as yup from 'yup'
+import queryString, { StringifyOptions } from 'query-string'
+import Axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+
+import { Api, BasePaths, InferPaths } from './api'
+import { Methods, Path } from './path'
+import {
+  MapOperationToBodyType,
+  MapOperationToPathParamsType,
+  MapOperationToQueryType,
+  MapOperationToResponse,
+  Operation,
+} from './operation'
+import { formatString } from './utils'
 
 
 type NonNullable<T> = Exclude<T, null | undefined>;
@@ -12,6 +20,7 @@ type NonNullable<T> = Exclude<T, null | undefined>;
 export type TyrannConfig<OperationType extends Operation> = AxiosRequestConfig & {
     query?: MapOperationToQueryType<OperationType>,
     pathParams?: MapOperationToPathParamsType<OperationType>,
+    queryOptions?: StringifyOptions,
 };
 
 export interface TyrannOptions {
@@ -76,7 +85,7 @@ export const tyrann = <Paths extends BasePaths, ApiType extends Api<Paths>>(
                 sanitizedParams : operation.query.transform(sanitizedParams);
 
             if (Object.keys(finalParams).length > 0) {
-                finalUrl += '?' + new URLSearchParams(finalParams).toString();
+                finalUrl += '?' + queryString.stringify(finalParams, config.queryOptions);
             }
         }
 

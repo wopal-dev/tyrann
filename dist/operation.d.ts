@@ -31,6 +31,6 @@ export declare type MapOperationToResponse<OperationType extends Operation> = Op
     [x in HttpStatus]?: InferResponseType<OperationType['responses'][x]>;
 } : never;
 export declare type MapOperationToBodyType<OperationType extends Operation> = OperationType['body'] extends yup.AnySchema ? InferInterface<OperationType['body']> : undefined;
-export declare type MapOperationToQueryType<OperationType extends Operation> = OperationType['query'] extends GenericSchema ? InferInterface<OperationType['query']> : undefined;
+export declare type MapOperationToQueryType<OperationType extends Operation> = OperationType['query'] extends BasicSchema ? InferInterface<OperationType['query']> : OperationType['query'] extends TransformedSchema ? InferInterface<OperationType['query']['schema']> : never;
 export declare type MapOperationToPathParamsType<OperationType extends Operation> = OperationType['pathParams'] extends yup.AnySchema ? InferInterface<OperationType['pathParams']> : undefined;
 export declare type InferResponses<F> = F extends Operation<infer Responses> ? Responses : never;
