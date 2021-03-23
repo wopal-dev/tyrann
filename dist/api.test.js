@@ -106,6 +106,20 @@ var api = {
                 }
             }
         },
+        "/put": {
+            put: {
+                body: yup.object({
+                    x: yup.number().required(),
+                    y: yup.number().required(),
+                }),
+                responses: {
+                    '200': yup.object({
+                        brotli: yup.string().required(),
+                        method: yup.string().required(),
+                    })
+                }
+            }
+        },
         "/query": {
             get: {
                 query: yup.object({
@@ -201,39 +215,42 @@ var client = tyrann_1.tyrann(api, instance);
                     })];
             case 2:
                 _a.sent();
+                return [4 /*yield*/, client.put("/put", { x: 1, y: 1 })];
+            case 3:
+                _a.sent();
                 return [4 /*yield*/, client.get("/brotli").then(function (x) {
                         var _a;
                         (_a = x[200]) === null || _a === void 0 ? void 0 : _a.brotli;
                     })];
-            case 3:
+            case 4:
                 _a.sent();
                 return [4 /*yield*/, client.post("/brotli", undefined).then(function (x) {
                         var _a;
                         // @ts-expect-error
                         (_a = x[200]) === null || _a === void 0 ? void 0 : _a.brotli;
                     })];
-            case 4:
+            case 5:
                 _a.sent();
                 // @ts-expect-error
                 return [4 /*yield*/, client.post("/post", {}).then(function (x) {
                         var _a;
                         (_a = x[200]) === null || _a === void 0 ? void 0 : _a.brotli;
                     })];
-            case 5:
+            case 6:
                 // @ts-expect-error
                 _a.sent();
                 return [4 /*yield*/, client.post("/post", { x: 1, y: 1 }).then(function (x) {
                         var _a;
                         (_a = x[200]) === null || _a === void 0 ? void 0 : _a.brotli;
                     })];
-            case 6:
+            case 7:
                 _a.sent();
                 // @ts-expect-error
                 return [4 /*yield*/, client.post("/post").then(function (x) {
                         var _a;
                         (_a = x[200]) === null || _a === void 0 ? void 0 : _a.brotli;
                     })];
-            case 7:
+            case 8:
                 // @ts-expect-error
                 _a.sent();
                 return [4 /*yield*/, client.get("/query", {
@@ -245,7 +262,7 @@ var client = tyrann_1.tyrann(api, instance);
                         var _a;
                         (_a = x[200]) === null || _a === void 0 ? void 0 : _a.brotli;
                     })];
-            case 8:
+            case 9:
                 _a.sent();
                 return [4 /*yield*/, client.get("/transform/{id}", {
                         pathParams: {
@@ -254,7 +271,7 @@ var client = tyrann_1.tyrann(api, instance);
                     }).then(function (x) {
                         var s = x[200];
                     })];
-            case 9:
+            case 10:
                 _a.sent();
                 return [4 /*yield*/, client.get("/transform/{id}", {
                         // @ts-expect-error
@@ -262,7 +279,7 @@ var client = tyrann_1.tyrann(api, instance);
                     }).then(function (x) {
                         var s = x[200];
                     })];
-            case 10:
+            case 11:
                 _a.sent();
                 return [4 /*yield*/, client.get("/transform/query/", {
                         query: {
@@ -271,12 +288,12 @@ var client = tyrann_1.tyrann(api, instance);
                     }).then(function (x) {
                         var s = x[200];
                     })];
-            case 11:
+            case 12:
                 _a.sent();
                 return [4 /*yield*/, client.get("/not-required/{id}", {
                         pathParams: {}
                     })];
-            case 12:
+            case 13:
                 _a.sent();
                 return [2 /*return*/];
         }

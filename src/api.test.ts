@@ -64,6 +64,20 @@ const api = {
                 }
             }
         },
+        "/put": {
+            put: {
+                body: yup.object({
+                    x: yup.number().required(),
+                    y: yup.number().required(),
+                }),
+                responses: {
+                    '200': yup.object({
+                        brotli: yup.string().required(),
+                        method: yup.string().required(),
+                    })
+                }
+            }
+        },
         "/query": {
             get: {
                 query: yup.object({
@@ -155,6 +169,8 @@ async () => {
         x[200]?.brotli;
     });
 
+    await client.put("/put", { x: 1, y: 1 });
+    
     await client.get("/brotli").then(x => {
         x[200]?.brotli;
     });

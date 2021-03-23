@@ -60,6 +60,14 @@ export const tyrann = <Paths extends BasePaths, ApiType extends Api<Paths>>(
         MapOperationToResponse<NonNullable<ApiPaths[PathType]["post"]>>
     >;
 
+    type PutType = <PathType extends PathTypes>(
+        path: PathType,
+        body: MapOperationToBodyType<NonNullable<ApiPaths[PathType]["put"]>>,
+        config?: TyrannConfig<NonNullable<ApiPaths[PathType]["put"]>>
+    ) => Promise<
+        MapOperationToResponse<NonNullable<ApiPaths[PathType]["put"]>>
+    >;
+
     const fetch: FetchType = async (method, path, config) => {
         const operation = (api as any).paths[path]?.[method] as Operation;
         let finalUrl: string;
@@ -146,14 +154,14 @@ export const tyrann = <Paths extends BasePaths, ApiType extends Api<Paths>>(
 
     const get: MethodType<"get"> = (path, config) => fetch("get", path, config);
     const post: PostType = (path, body, config) => fetch("post", path, { data: body, ...config });
-    // const put: PostType = (path, body, config) => fetch("put", path, { data: body, ...config });
+    const put: PutType = (path, body, config) => fetch("put", path, { data: body, ...config });
     const del: MethodType<"delete"> = (path, config) => fetch("delete", path, config);
 
     return {
         fetch,
         get,
         post,
-        // put,
+        put,
         del,
         api,
         axios,

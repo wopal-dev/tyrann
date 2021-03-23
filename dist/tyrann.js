@@ -51,6 +51,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.tyrann = void 0;
+var query_string_1 = __importDefault(require("query-string"));
 var axios_1 = __importDefault(require("axios"));
 var utils_1 = require("./utils");
 var tyrann = function (api, axiosInstance, options) {
@@ -88,7 +89,7 @@ var tyrann = function (api, axiosInstance, options) {
                     finalParams = '__isYupSchema__' in operation.query ?
                         sanitizedParams : operation.query.transform(sanitizedParams);
                     if (Object.keys(finalParams).length > 0) {
-                        finalUrl += '?' + new URLSearchParams(finalParams).toString();
+                        finalUrl += '?' + query_string_1.default.stringify(finalParams, config.queryOptions);
                     }
                     _k.label = 5;
                 case 5:
@@ -149,13 +150,13 @@ var tyrann = function (api, axiosInstance, options) {
     }); };
     var get = function (path, config) { return fetch("get", path, config); };
     var post = function (path, body, config) { return fetch("post", path, __assign({ data: body }, config)); };
-    // const put: PostType = (path, body, config) => fetch("put", path, { data: body, ...config });
+    var put = function (path, body, config) { return fetch("put", path, __assign({ data: body }, config)); };
     var del = function (path, config) { return fetch("delete", path, config); };
     return {
         fetch: fetch,
         get: get,
         post: post,
-        // put,
+        put: put,
         del: del,
         api: api,
         axios: axios,
