@@ -70,6 +70,9 @@ export const tyrann = <Paths extends BasePaths, ApiType extends Api<Paths>>(
 
     const fetch: FetchType = async (method, path, config) => {
         const operation = (api as any).paths[path]?.[method] as Operation;
+        if (operation.transformBody && config) {
+            config.data = operation.transformBody(config?.data);
+        }
         let finalUrl: string;
         if (operation.pathParams) {
             if (config?.pathParams === undefined) {

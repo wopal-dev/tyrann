@@ -38,6 +38,7 @@ export type Operation<
         query?: QuerySchema;
         pathParams?: PathParamsSchema;
         body?: BodySchema;
+        transformBody?: (body: any) => any;
         responses: Responses;
     };
 
