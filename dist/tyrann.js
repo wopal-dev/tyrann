@@ -57,28 +57,25 @@ var utils_1 = require("./utils");
 var tyrann = function (api, axiosInstance, options) {
     var axios = axiosInstance || axios_1.default.create();
     var fetch = function (method, path, config) { return __awaiter(void 0, void 0, void 0, function () {
-        var operation, finalUrl, sanitizedParams, sanitizedParams, finalParams, startTime, axiosOptions, _a, _b, response, fullPath, warnError, responseDef, schema, transform, result, ok, e_1;
-        var _c, _d;
-        var _e, _f, _g, _h, _j;
-        return __generator(this, function (_k) {
-            switch (_k.label) {
+        var operation, finalUrl, sanitizedParams, sanitizedParams, finalParams, transformBody, startTime, axiosOptions, _a, _b, _c, response, fullPath, warnError, responseDef, schema, transform, result, ok, e_1;
+        var _d, _e;
+        var _f, _g, _h, _j, _k, _l;
+        return __generator(this, function (_m) {
+            switch (_m.label) {
                 case 0:
-                    operation = (_e = api.paths[path]) === null || _e === void 0 ? void 0 : _e[method];
-                    if (operation.transformBody && config) {
-                        config.data = operation.transformBody(config === null || config === void 0 ? void 0 : config.data);
-                    }
+                    operation = (_f = api.paths[path]) === null || _f === void 0 ? void 0 : _f[method];
                     if (!operation.pathParams) return [3 /*break*/, 2];
                     if ((config === null || config === void 0 ? void 0 : config.pathParams) === undefined) {
                         throw new Error("Path params are not supplied to " + method + " " + path);
                     }
                     return [4 /*yield*/, operation.pathParams.validate(config === null || config === void 0 ? void 0 : config.pathParams)];
                 case 1:
-                    sanitizedParams = _k.sent();
+                    sanitizedParams = _m.sent();
                     finalUrl = utils_1.formatString(path, sanitizedParams);
                     return [3 /*break*/, 3];
                 case 2:
                     finalUrl = path;
-                    _k.label = 3;
+                    _m.label = 3;
                 case 3:
                     if (!operation.query) return [3 /*break*/, 5];
                     if ((config === null || config === void 0 ? void 0 : config.query) === undefined) {
@@ -88,36 +85,41 @@ var tyrann = function (api, axiosInstance, options) {
                             operation.query.validate(config === null || config === void 0 ? void 0 : config.query) :
                             operation.query.schema.validate(config === null || config === void 0 ? void 0 : config.query))];
                 case 4:
-                    sanitizedParams = _k.sent();
+                    sanitizedParams = _m.sent();
                     finalParams = '__isYupSchema__' in operation.query ?
                         sanitizedParams : operation.query.transform(sanitizedParams);
                     if (Object.keys(finalParams).length > 0) {
                         finalUrl += '?' + query_string_1.default.stringify(finalParams, config.queryOptions);
                     }
-                    _k.label = 5;
+                    _m.label = 5;
                 case 5:
+                    if (operation.transformBody && config) {
+                        config.data = operation.transformBody(config === null || config === void 0 ? void 0 : config.data);
+                    }
+                    transformBody = (_g = operation.transformBody) !== null && _g !== void 0 ? _g : (function (x) { return x; });
                     startTime = Date.now();
                     _a = [__assign({ url: finalUrl, method: method }, config)];
                     _b = (config === null || config === void 0 ? void 0 : config.data);
                     if (!_b) return [3 /*break*/, 7];
-                    _c = {};
+                    _d = {};
+                    _c = transformBody;
                     return [4 /*yield*/, operation.body.validate(config.data)];
                 case 6:
-                    _b = (_c.data = _k.sent(),
-                        _c);
-                    _k.label = 7;
+                    _b = (_d.data = _c.apply(void 0, [_m.sent()]),
+                        _d);
+                    _m.label = 7;
                 case 7:
                     axiosOptions = __assign.apply(void 0, _a.concat([(_b)]));
-                    (_f = options === null || options === void 0 ? void 0 : options.onRequest) === null || _f === void 0 ? void 0 : _f.call(options, axiosOptions);
+                    (_h = options === null || options === void 0 ? void 0 : options.onRequest) === null || _h === void 0 ? void 0 : _h.call(options, axiosOptions);
                     return [4 /*yield*/, axios.request(axiosOptions)];
                 case 8:
-                    response = _k.sent();
-                    (_g = options === null || options === void 0 ? void 0 : options.onResponse) === null || _g === void 0 ? void 0 : _g.call(options, Date.now() - startTime, response, axiosOptions);
+                    response = _m.sent();
+                    (_j = options === null || options === void 0 ? void 0 : options.onResponse) === null || _j === void 0 ? void 0 : _j.call(options, Date.now() - startTime, response, axiosOptions);
                     fullPath = response.request.responseURL || finalUrl;
                     warnError = function () {
                         console.warn(method + " " + fullPath + " received unexpected data with code " + response.status + ": \n" + fullPath + "\n" + JSON.stringify(response.data, undefined, 2));
                     };
-                    responseDef = (_j = (_h = operation) === null || _h === void 0 ? void 0 : _h.responses) === null || _j === void 0 ? void 0 : _j["" + response.status];
+                    responseDef = (_l = (_k = operation) === null || _k === void 0 ? void 0 : _k.responses) === null || _l === void 0 ? void 0 : _l["" + response.status];
                     schema = responseDef;
                     if (schema === undefined) {
                         warnError();
@@ -127,24 +129,24 @@ var tyrann = function (api, axiosInstance, options) {
                         schema = responseDef.schema;
                         transform = responseDef.transform;
                     }
-                    _k.label = 9;
+                    _m.label = 9;
                 case 9:
-                    _k.trys.push([9, 11, , 12]);
+                    _m.trys.push([9, 11, , 12]);
                     return [4 /*yield*/, schema.validate(response.data)];
                 case 10:
-                    result = _k.sent();
+                    result = _m.sent();
                     result = transform ? transform(result) : result;
                     ok = response.status >= 200 && response.status < 400;
-                    return [2 /*return*/, (_d = {
+                    return [2 /*return*/, (_e = {
                                 ok: ok,
                                 path: path,
                                 url: finalUrl,
                                 status: response.status
                             },
-                            _d[response.status] = result,
-                            _d)];
+                            _e[response.status] = result,
+                            _e)];
                 case 11:
-                    e_1 = _k.sent();
+                    e_1 = _m.sent();
                     warnError();
                     throw new Error(method + " " + fullPath + " got invalid data: " + JSON.stringify(e_1.errors, undefined, 2));
                 case 12: return [2 /*return*/];

@@ -98,9 +98,6 @@ export const tyrann = <Paths extends BasePaths, ApiType extends Api<Paths>>(
             }
         }
 
-        if (operation.transformBody && config) {
-            config.data = operation.transformBody(config?.data);
-        }
         const transformBody = operation.transformBody ?? ((x: any) => x);
 
         let startTime = Date.now();
