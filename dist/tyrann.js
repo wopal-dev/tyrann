@@ -64,6 +64,9 @@ var tyrann = function (api, axiosInstance, options) {
             switch (_k.label) {
                 case 0:
                     operation = (_e = api.paths[path]) === null || _e === void 0 ? void 0 : _e[method];
+                    if (operation.transformBody && config) {
+                        config.data = operation.transformBody(config === null || config === void 0 ? void 0 : config.data);
+                    }
                     if (!operation.pathParams) return [3 /*break*/, 2];
                     if ((config === null || config === void 0 ? void 0 : config.pathParams) === undefined) {
                         throw new Error("Path params are not supplied to " + method + " " + path);

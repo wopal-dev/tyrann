@@ -24,6 +24,7 @@ export declare type Operation<Responses extends BaseResponses = BaseResponses, Q
     query?: QuerySchema;
     pathParams?: PathParamsSchema;
     body?: BodySchema;
+    transformBody?: (body: any) => any;
     responses: Responses;
 };
 export declare type InferResponseType<Response> = Response extends TransformedSchema<any, infer OutType> ? OutType : Response extends BasicSchema ? yup.InferType<Response> : never;

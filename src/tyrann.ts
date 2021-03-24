@@ -70,9 +70,7 @@ export const tyrann = <Paths extends BasePaths, ApiType extends Api<Paths>>(
 
     const fetch: FetchType = async (method, path, config) => {
         const operation = (api as any).paths[path]?.[method] as Operation;
-        if (operation.transformBody && config) {
-            config.data = operation.transformBody(config?.data);
-        }
+
         let finalUrl: string;
         if (operation.pathParams) {
             if (config?.pathParams === undefined) {
@@ -100,13 +98,18 @@ export const tyrann = <Paths extends BasePaths, ApiType extends Api<Paths>>(
             }
         }
 
+        if (operation.transformBody && config) {
+            config.data = operation.transformBody(config?.data);
+        }
+        const transformBody = operation.transformBody ?? ((x: any) => x);
+
         let startTime = Date.now();
         const axiosOptions = {
             url: finalUrl,
             method: method as AxiosRequestConfig['method'],
             ...config,
             ...(config?.data && {
-                data: await operation.body.validate(config.data)
+                data: transformBody(await operation.body.validate(config.data))
             })
         };
 
