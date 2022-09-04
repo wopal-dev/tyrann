@@ -1,0 +1,25 @@
+{
+	"name": "tyrann-example",
+  "version": "0.0.1",
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "author": "Chenyu Wang",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hanayashiki/template-npm"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "scripts": {
+    "start": "tsx src/index.ts"
+  },
+  "devDependencies": {
+    "tyrann": "link:../",
+    "tsx": "^3.9.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

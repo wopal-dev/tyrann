@@ -1,16 +1,42 @@
 {
   "name": "tyrann",
-  "version": "0.2.2",
+  "version": "0.2.3",
+  "type": "commonjs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "author": "Chenyu Wang",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hanayashiki/tyrann"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "scripts": {
-    "prepublish": "tsc"
+    "prepare": "husky install; pnpm build",
+    "dev": "tsx src/index.ts",
+    "build": "tsup src/index.ts --format esm,cjs && tsc -p tsconfig.build.json",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.36.0",
+    "@typescript-eslint/parser": "^5.36.0",
+    "eslint": "^8.23.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.1",
+    "prettier": "^2.7.1",
+    "tsup": "^6.2.3",
+    "typescript": "^4.8.2",
+    "vitest": "^0.22.1"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
-    "axios": "^0.21.1",
-    "query-string": "^6.14.1",
-    "util": "^0.12.3",
-    "yup": "^0.32.8"
+    "axios": "^0.27.2",
+    "query-string": "^7.1.1",
+    "yup": "1.0.0-beta.7"
   }
 }
