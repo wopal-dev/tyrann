@@ -20,16 +20,16 @@
     "test": "vitest"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.36.0",
-    "@typescript-eslint/parser": "^5.36.0",
-    "eslint": "^8.23.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "husky": "^8.0.1",
-    "prettier": "^2.7.1",
-    "tsup": "^6.2.3",
-    "typescript": "^4.8.2",
-    "vitest": "^0.22.1"
+    "@typescript-eslint/eslint-plugin": "5.41.0",
+    "@typescript-eslint/parser": "5.41.0",
+    "eslint": "8.26.0",
+    "eslint-plugin-import": "2.26.0",
+    "eslint-plugin-prettier": "4.2.1",
+    "husky": "8.0.1",
+    "prettier": "2.7.1",
+    "tsup": "6.3.0",
+    "typescript": "4.8.4",
+    "vitest": "0.22.1"
   },
   "publishConfig": {
     "access": "public"
